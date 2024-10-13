@@ -51,7 +51,8 @@ class M3FD(Dataset):
         check_image(root, img_list)
 
         # check labels
-        self.labels = check_labels(root, img_list)
+        # self.labels = check_labels(root, img_list)
+        self.labels = [None] * len(img_list)
 
         # more check
         match mode:

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch import Tensor
-
+from torchsummary import summary
 
 class Generator(nn.Module):
     r"""
@@ -56,3 +56,11 @@ class Generator(nn.Module):
             x = torch.cat([x, t], dim=1)
         fus = self.fuse(x)
         return fus
+
+if __name__ == '__main__':
+    ir = torch.randn(1, 1, 256, 256)
+    vi = torch.randn(1, 1, 256, 256)
+    generator = Generator()
+    fus = generator(ir, vi)
+    print(fus.shape)
+    summary(generator, [(1, 256, 256), (1, 256, 256)], device='cpu')

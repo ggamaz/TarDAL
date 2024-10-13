@@ -24,7 +24,7 @@ fuse     :
 detect   :
   model     : yolov5s # yolo model (yolov5 n,s,m,l,x)
   channels  : 3 # input channels (3: rgb or 1: grayscale)
-  pretrained: https://github.com/JinyuanLiu-CV/TarDAL/releases/download/v1.0.0/tardal-ct.pth # ~: disable, path or url: load with pretrained parameters
+  pretrained: https://github.com/JinyuanLiu-CV/TarDAL/releases/download/v1.0.0/tardal-dt.pth # ~: disable, path or url: load with pretrained parameters
 
 # saliency network settings: generating mask for training tardal
 saliency :
@@ -38,7 +38,7 @@ iqa      :
 #   we provide four built-in representative datasets,
 #   if you want to use some custom datasets, please refer to the documentation to write yourself or open an issue.
 dataset  :
-  name  : roadscene # dataset folder to be trained with (fuse: TNO, RoadScene; fuse & detect: M3FD, MultiSpectral, etc.)
+  name  : M3FD #RoadScene # dataset folder to be trained with (fuse: TNO, RoadScene; fuse & detect: M3FD, MultiSpectral, etc.)
   root  : assets/sample/s1 # dataset root path
   # only available for fuse & detect
   detect:

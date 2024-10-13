@@ -18,7 +18,7 @@ from module.detect.utils.general import labels_to_class_weights, non_max_suppres
 from module.detect.utils.loss import ComputeLoss
 from module.detect.utils.metrics import box_iou
 
-
+from ultralytics import YOLO
 class Detect:
     r"""
     Init detect pipeline to detect objects from fused images.
@@ -37,7 +37,9 @@ class Detect:
         # init yolo model
         model_t = config.detect.model
         config_p = Path(__file__).parents[1] / 'module' / 'detect' / 'models' / f'{model_t}.yaml'
-        net = Model(cfg=config_p, ch=config.detect.channels, nc=nc).to(self.device)
+        # net = Model(cfg=config_p, ch=config.detect.channels, nc=nc).to(self.device)
+        net = YOLO('yolov5s.yaml', 'detect').to(self.device)
+        net = net.model
         logging.info(f'init {model_t} with (nc: {nc})')
         self.net = net
 

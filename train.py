@@ -8,41 +8,48 @@ import yaml
 import scripts
 from config import from_dict
 
+from ultralytics import YOLO
 if __name__ == '__main__':
-    # args parser
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', default='config/default.yaml', help='config file path')
-    parser.add_argument('--auth', help='wandb auth api key')
-    args = parser.parse_args()
+    # test code
+    net = YOLO('yolov5s.yaml', 'detect')
+    # print(net.model.model[-1])
+    print(net.model.names)
 
-    # init config
-    config = yaml.safe_load(Path(args.cfg).open('r'))
-    config = from_dict(config)  # convert dict to object
-    config = config
+# if __name__ == '__main__':
+#     # args parser
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--cfg', default='config/default.yaml', help='config file path')
+#     parser.add_argument('--auth', help='wandb auth api key')
+#     args = parser.parse_args()
 
-    # init logger
-    log_f = '%(asctime)s | %(filename)s[line:%(lineno)d] | %(levelname)s | %(message)s'
-    logging.basicConfig(level=config.debug.log, format=log_f)
+#     # init config
+#     config = yaml.safe_load(Path(args.cfg).open('r'))
+#     config = from_dict(config)  # convert dict to object
+#     config = config
 
-    # init device & anomaly detector
-    torch.backends.cudnn.benchmark = True
-    torch.autograd.set_detect_anomaly(True)
+#     # init logger
+#     log_f = '%(asctime)s | %(filename)s[line:%(lineno)d] | %(levelname)s | %(message)s'
+#     logging.basicConfig(level=config.debug.log, format=log_f)
 
-    # choose train script
-    logging.info(f'enter {config.strategy} train mode')
-    match config.strategy:
-        case 'fuse':
-            train_p = getattr(scripts, 'TrainF')
-        case 'detect':
-            if config.loss.bridge.fuse != 0:
-                logging.warning('overwrite fuse loss weight to 0')
-                config.loss.bridge.fuse = 0
-            train_p = getattr(scripts, 'TrainFD')
-        case 'fuse & detect':
-            train_p = getattr(scripts, 'TrainFD')
-        case _:
-            raise ValueError(f'unknown strategy: {config.strategy}')
+#     # init device & anomaly detector
+#     torch.backends.cudnn.benchmark = True
+#     torch.autograd.set_detect_anomaly(True)
 
-    # create script instance
-    train = train_p(config, wandb_key=args.auth)
-    train.run()
+#     # choose train script
+#     logging.info(f'enter {config.strategy} train mode')
+#     match config.strategy:
+#         case 'fuse':
+#             train_p = getattr(scripts, 'TrainF')
+#         case 'detect':
+#             if config.loss.bridge.fuse != 0:
+#                 logging.warning('overwrite fuse loss weight to 0')
+#                 config.loss.bridge.fuse = 0
+#             train_p = getattr(scripts, 'TrainFD')
+#         case 'fuse & detect':
+#             train_p = getattr(scripts, 'TrainFD')
+#         case _:
+#             raise ValueError(f'unknown strategy: {config.strategy}')
+
+#     # create script instance
+#     train = train_p(config, wandb_key=args.auth)
+#     train.run()

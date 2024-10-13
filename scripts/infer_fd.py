@@ -12,8 +12,7 @@ from config import ConfigDict, from_dict
 from pipeline.detect import Detect
 from pipeline.fuse import Fuse
 from tools.dict_to_device import dict_to_device
-
-
+from ultralytics import YOLO
 class InferFD:
     def __init__(self, config: str | Path | ConfigDict, save_dir: str | Path):
         # init logger
@@ -57,7 +56,8 @@ class InferFD:
         # init pipeline
         fuse = Fuse(config, mode='inference')
         self.fuse = fuse
-        detect = Detect(config, mode='inference', nc=len(p_dataset.classes), classes=p_dataset.classes, labels=p_dataset.labels)
+        # detect = Detect(config, mode='inference', nc=len(p_dataset.classes), classes=p_dataset.classes, labels=p_dataset.labels)
+        detect = YOLO('yolov5n.yaml', 'detect')
         self.detect = detect
 
     @torch.inference_mode()
